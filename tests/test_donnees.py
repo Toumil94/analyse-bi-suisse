@@ -36,7 +36,8 @@ def test_valeurs_positives_et_coherentes():
     for r in rows("fact_offre.csv"):
         assert int(r["nuitees_chambres"]) <= int(r["chambres"]) * 31
         if r["capacite_chambres_jours"]:
-            assert int(r["capacite_chambres_jours"]) <= int(r["chambres"]) * 31 + 1
+            # la capacité est reconstituée à partir d'un taux arrondi à 0,1 point : tolérance de 2 %
+            assert int(r["capacite_chambres_jours"]) <= int(r["chambres"]) * 31 * 1.02
         assert int(r["lits"]) >= int(r["chambres"]) > 0
 
 
