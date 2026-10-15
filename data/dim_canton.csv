@@ -1,0 +1,27 @@
+canton_id,canton,abreviation,grande_region,langue
+1,Zürich,ZH,Zurich,allemand
+2,Bern / Berne,BE,Espace Mittelland,allemand
+3,Luzern,LU,Suisse centrale,allemand
+4,Uri,UR,Suisse centrale,allemand
+5,Schwyz,SZ,Suisse centrale,allemand
+6,Obwalden,OW,Suisse centrale,allemand
+7,Nidwalden,NW,Suisse centrale,allemand
+8,Glarus,GL,Suisse orientale,allemand
+9,Zug,ZG,Suisse centrale,allemand
+10,Fribourg / Freiburg,FR,Espace Mittelland,français
+11,Solothurn,SO,Espace Mittelland,allemand
+12,Basel-Stadt,BS,Suisse du Nord-Ouest,allemand
+13,Basel-Landschaft,BL,Suisse du Nord-Ouest,allemand
+14,Schaffhausen,SH,Suisse orientale,allemand
+15,Appenzell Ausserrhoden,AR,Suisse orientale,allemand
+16,Appenzell Innerrhoden,AI,Suisse orientale,allemand
+17,St. Gallen,SG,Suisse orientale,allemand
+18,Graubünden / Grigioni / Grischun,GR,Suisse orientale,allemand
+19,Aargau,AG,Suisse du Nord-Ouest,allemand
+20,Thurgau,TG,Suisse orientale,allemand
+21,Ticino,TI,Tessin,italien
+22,Vaud,VD,Région lémanique,français
+23,Valais / Wallis,VS,Région lémanique,français
+24,Neuchâtel,NE,Espace Mittelland,français
+25,Genève,GE,Région lémanique,français
+26,Jura,JU,Espace Mittelland,français

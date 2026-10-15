@@ -1,0 +1,29 @@
+{
+  "date_extraction": "2026-10-15",
+  "periode": [
+    "20050101",
+    "20260801"
+  ],
+  "lignes": {
+    "fact_demande": 398192,
+    "fact_offre": 6760
+  },
+  "somme_pays_vs_total_canton_ecart_pct": {
+    "n": 6760,
+    "moyenne": 0.0,
+    "mediane": 0.0,
+    "max": 0.0
+  },
+  "somme_cantons_vs_total_suisse_ecart_pct": {
+    "n": 260,
+    "moyenne": 0.0,
+    "mediane": 0.0,
+    "max": 0.0
+  },
+  "taux_occupation_naif_vs_ofs_ecart_points": {
+    "n": 6760,
+    "moyenne": 1.6,
+    "mediane": 1.11,
+    "max": 17.84
+  }
+}

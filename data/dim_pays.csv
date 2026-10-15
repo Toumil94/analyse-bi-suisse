@@ -1,0 +1,78 @@
+pays_id,pays,marche,continent
+1,Suisse,Suisse,Suisse
+10,Pays baltes,Pays baltes,Europe
+11,Allemagne,Allemagne,Europe
+13,France,France,Europe
+14,Italie,Italie,Europe
+15,Autriche,Autriche,Europe
+16,Royaume-Uni,Royaume-Uni,Europe
+17,Irlande,Irlande,Europe
+18,Pays-Bas,Pays-Bas,Europe
+19,Belgique,Belgique,Europe
+20,Luxembourg,Luxembourg,Europe
+21,Danemark,Danemark,Europe
+22,Suède,Suède,Europe
+23,Norvège,Norvège,Europe
+24,Finlande,Finlande,Europe
+25,Espagne,Espagne,Europe
+26,Portugal,Portugal,Europe
+28,Grèce,Grèce,Europe
+29,Turquie,Turquie,Europe
+31,Autres Europe,Autres Europe,Europe
+32,Liechtenstein,Liechtenstein,Europe
+33,Islande,Islande,Europe
+34,Pologne,Pologne,Europe
+35,Hongrie,Hongrie,Europe
+36,Bélarus,Bélarus,Europe
+37,Bulgarie,Bulgarie,Europe
+38,Malte,Malte,Europe
+39,Chypre,Chypre,Europe
+40,Chili,Chili,Amériques
+41,États-Unis,États-Unis,Amériques
+42,Canada,Canada,Amériques
+43,Mexique,Mexique,Amériques
+44,Brésil,Brésil,Amériques
+45,Argentine,Argentine,Amériques
+47,"Amérique Centrale, Caraïbes",Amérique centrale et Caraïbes,Amériques
+48,Autres Amérique du Sud,Autres Amérique du Sud,Amériques
+49,"Autres Amérique centrale, Caraïbes",Amérique centrale et Caraïbes,Amériques
+51,Égypte,Égypte,Afrique
+52,Autres Afrique du Nord,Autres Afrique du Nord,Afrique
+53,Afrique du Sud,Afrique du Sud,Afrique
+54,Autres Afrique,Autres Afrique,Afrique
+60,Bahreïn,Pays du Golfe,Pays du Golfe
+61,Israël,Israël,Asie
+62,Inde,Inde,Asie
+64,Japon,Japon,Asie
+66,Autres Asie de l'Est,Autres Asie de l'Est,Asie
+68,Qatar,Pays du Golfe,Pays du Golfe
+69,Koweït,Pays du Golfe,Pays du Golfe
+70,Australie,Océanie,Océanie
+71,"Australie, N.Zélande, Océanie",Océanie,Océanie
+72,Chine,Chine,Asie
+73,Pays du Golfe,Pays du Golfe,Pays du Golfe
+74,Hong Kong,Hong Kong,Asie
+75,Indonésie,Indonésie,Asie
+76,Corée (Sud),Corée (Sud),Asie
+77,Malaisie,Malaisie,Asie
+78,Philippines,Philippines,Asie
+79,"Nouvelle Zélande, Océanie",Océanie,Océanie
+80,Singapour,Singapour,Asie
+81,Oman,Pays du Golfe,Pays du Golfe
+82,Taïwan (Taipei chinois),Taïwan (Taipei chinois),Asie
+83,Thaïlande,Thaïlande,Asie
+84,Autres Asie de l'Ouest,Autres Asie de l'Ouest,Asie
+85,Estonie,Pays baltes,Europe
+86,Lettonie,Pays baltes,Europe
+87,Lituanie,Pays baltes,Europe
+88,Arabie saoudite,Pays du Golfe,Pays du Golfe
+89,Émirats arabes unis,Pays du Golfe,Pays du Golfe
+90,Serbie et Monténégro,Serbie et Monténégro,Europe
+91,Croatie,Croatie,Europe
+92,Roumanie,Roumanie,Europe
+93,Russie,Russie,Europe
+94,Slovaquie,Slovaquie,Europe
+95,Slovénie,Slovénie,Europe
+96,Tchéquie,Tchéquie,Europe
+97,Ukraine,Ukraine,Europe
+98,Serbie,Serbie et Monténégro,Europe

@@ -1,0 +1,114 @@
+{
+  "dernier_mois": "août 2026",
+  "derniere_annee_complete": 2025,
+  "suisse_nuitees_annee": 43930146,
+  "suisse_vs_2019": 111.0,
+  "geneve_nuitees_annee": 3851477,
+  "geneve_vs_2019": 120.2,
+  "geneve_part_suisse": 8.8,
+  "geneve_creux_2020_vs_2019": 32.5,
+  "suisse_creux_2020_vs_2019": 60.0,
+  "rang_geneve_reprise": 3,
+  "meilleure_reprise": {
+    "canton": "Aargau",
+    "niveau": 124.9
+  },
+  "plus_faible_reprise": {
+    "canton": "Obwalden",
+    "niveau": 91.8
+  },
+  "geneve_top_marches": [
+    {
+      "marche": "Suisse",
+      "nuitees": 1043710,
+      "part": 27.1,
+      "vs_2019": 168.2
+    },
+    {
+      "marche": "États-Unis",
+      "nuitees": 404564,
+      "part": 10.5,
+      "vs_2019": 124.2
+    },
+    {
+      "marche": "France",
+      "nuitees": 333917,
+      "part": 8.7,
+      "vs_2019": 131.1
+    },
+    {
+      "marche": "Royaume-Uni",
+      "nuitees": 296542,
+      "part": 7.7,
+      "vs_2019": 116.6
+    },
+    {
+      "marche": "Pays du Golfe",
+      "nuitees": 219161,
+      "part": 5.7,
+      "vs_2019": 91.8
+    },
+    {
+      "marche": "Allemagne",
+      "nuitees": 121753,
+      "part": 3.2,
+      "vs_2019": 107.3
+    },
+    {
+      "marche": "Espagne",
+      "nuitees": 112325,
+      "part": 2.9,
+      "vs_2019": 110.7
+    },
+    {
+      "marche": "Chine",
+      "nuitees": 108548,
+      "part": 2.8,
+      "vs_2019": 107.3
+    },
+    {
+      "marche": "Italie",
+      "nuitees": 95848,
+      "part": 2.5,
+      "vs_2019": 99.7
+    },
+    {
+      "marche": "Brésil",
+      "nuitees": 64649,
+      "part": 1.7,
+      "vs_2019": 153.5
+    },
+    {
+      "marche": "Autres Afrique",
+      "nuitees": 61289,
+      "part": 1.6,
+      "vs_2019": 83.2
+    },
+    {
+      "marche": "Canada",
+      "nuitees": 59977,
+      "part": 1.6,
+      "vs_2019": 113.7
+    }
+  ],
+  "geneve_part_etrangers": 72.9,
+  "suisse_part_etrangers": 51.9,
+  "geneve_occupation_moyenne": 65.0,
+  "suisse_occupation_moyenne": 55.6,
+  "geneve_mois_plus_creux": {
+    "mois": "janvier",
+    "taux": 51.0
+  },
+  "geneve_mois_plus_plein": {
+    "mois": "juin",
+    "taux": 78.3
+  },
+  "periode_saisonnalite": "2023-2025",
+  "geneve_duree_sejour": 1.93,
+  "suisse_duree_sejour": 1.98,
+  "annee_en_cours": {
+    "periode": "janvier-août 2026",
+    "suisse_vs_a1": -0.7,
+    "geneve_vs_a1": -0.3
+  }
+}
