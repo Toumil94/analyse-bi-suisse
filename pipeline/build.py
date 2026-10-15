@@ -143,13 +143,19 @@ def main() -> None:
     for (y, m, k), d in sorted(offre.items()):
         if k == "8100" or not d.get("2"):
             continue  # mois sans établissement ouvert, ou total suisse
+        # L'OFS calcule le taux d'occupation sur les jours d'ouverture effectifs, que la table ne publie pas.
+        # On reconstitue donc la capacité exacte (chambres-jours et lits-jours offerts) à partir du taux publié :
+        # ainsi, le taux agrégé dans Power BI (somme des nuitées / somme des capacités) retrouve celui de l'OFS.
+        cap_ch = round(d["6"] * 100 / d["7"]) if d.get("6") and d.get("7") else None
+        cap_li = round(d["5"] * 100 / d["8"]) if d.get("5") and d.get("8") else None
         fact_o.append([dkey(y, m), k, int(d.get("1") or 0), int(d.get("2") or 0), int(d.get("3") or 0),
                        int(d.get("4") or 0), int(d.get("5") or 0), int(d.get("6") or 0),
-                       d.get("7"), d.get("8")])
+                       cap_ch, cap_li, d.get("7"), d.get("8")])
     periods = sorted({r[0] for r in fact_o} | {r[0] for r in fact_d})
     write_csv("fact_demande.csv", ["date_key", "canton_id", "pays_id", "arrivees", "nuitees"], fact_d)
     write_csv("fact_offre.csv", ["date_key", "canton_id", "etablissements", "chambres", "lits", "arrivees",
-                                 "nuitees", "nuitees_chambres", "taux_occ_chambres_ofs", "taux_occ_lits_ofs"], fact_o)
+                                 "nuitees", "nuitees_chambres", "capacite_chambres_jours", "capacite_lits_jours",
+                                 "taux_occ_chambres_ofs", "taux_occ_lits_ofs"], fact_o)
 
     # ----- dimensions -----
     dim_date = []
@@ -203,7 +209,9 @@ def main() -> None:
         "lignes": {"fact_demande": len(fact_d), "fact_offre": len(fact_o)},
         "somme_pays_vs_total_canton_ecart_pct": stats(ecarts_pays),
         "somme_cantons_vs_total_suisse_ecart_pct": stats(ecarts_canton),
-        "taux_occupation_recalcule_vs_ofs_ecart_points": stats(occ, pct=False),
+        # taux « naïf » (chambres x jours du mois) comparé au taux OFS (jours d'ouverture) :
+        # l'écart justifie la reconstitution de la capacité exacte dans fact_offre.
+        "taux_occupation_naif_vs_ofs_ecart_points": stats(occ, pct=False),
     }
     (DATA / "controles.json").write_text(json.dumps(controles, ensure_ascii=False, indent=2))
     print(json.dumps(controles, ensure_ascii=False, indent=2))

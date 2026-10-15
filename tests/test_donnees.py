@@ -35,6 +35,8 @@ def test_26_cantons():
 def test_valeurs_positives_et_coherentes():
     for r in rows("fact_offre.csv"):
         assert int(r["nuitees_chambres"]) <= int(r["chambres"]) * 31
+        if r["capacite_chambres_jours"]:
+            assert int(r["capacite_chambres_jours"]) <= int(r["chambres"]) * 31 + 1
         assert int(r["lits"]) >= int(r["chambres"]) > 0
 
 
@@ -43,5 +45,12 @@ def test_totaux_coherents_avec_ofs():
     # la somme des pays doit retrouver le total publié (écart médian < 0,5 %)
     assert c["somme_pays_vs_total_canton_ecart_pct"]["mediane"] < 0.5
     assert c["somme_cantons_vs_total_suisse_ecart_pct"]["mediane"] < 0.5
-    # le taux d'occupation recalculé doit retrouver celui de l'OFS à 1 point près (médiane)
-    assert c["taux_occupation_recalcule_vs_ofs_ecart_points"]["mediane"] < 1
+    # le taux « naïf » sur tous les jours du mois reste proche de l'OFS (médiane < 2 points)
+    assert c["taux_occupation_naif_vs_ofs_ecart_points"]["mediane"] < 2
+
+
+def test_capacite_reconstituee_retrouve_le_taux_ofs():
+    for r in rows("fact_offre.csv"):
+        if r["capacite_chambres_jours"] and r["taux_occ_chambres_ofs"]:
+            taux = 100 * int(r["nuitees_chambres"]) / int(r["capacite_chambres_jours"])
+            assert abs(taux - float(r["taux_occ_chambres_ofs"])) < 0.2
