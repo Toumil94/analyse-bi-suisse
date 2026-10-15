@@ -3,7 +3,9 @@
 let
     Source = Csv.Document(Web.Contents(BaseUrl & "fact_offre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
     Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
-    Types = Table.TransformColumnTypes(Entetes, {
+    // une cellule vide (mois sans taux publié) devient null au lieu de provoquer une erreur de type
+    Vides = Table.TransformColumns(Entetes, {}, each if _ = "" then null else _),
+    Types = Table.TransformColumnTypes(Vides, {
         {"date_key", type text}, {"canton_id", type text},
         {"etablissements", Int64.Type}, {"chambres", Int64.Type}, {"lits", Int64.Type},
         {"arrivees", Int64.Type}, {"nuitees", Int64.Type}, {"nuitees_chambres", Int64.Type},
