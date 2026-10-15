@@ -28,7 +28,10 @@ jobs:
           echo "::notice title=controles::$(tr -d '\n' < data/controles.json | tr -s ' ')"
 
       - name: Contrôles qualité
-        run: python -m pytest -q tests
+        run: |
+          set -o pipefail
+          python -m pytest -q -rf --tb=line tests 2>&1 | tee tests.log || {
+            echo "::error title=tests::$(grep -E 'FAILED|Error|assert' tests.log | head -20 | tr '\n' ' ' | cut -c1-3000)"; exit 1; }
 
       - name: Analyse et graphiques
         run: python pipeline/analyse.py
