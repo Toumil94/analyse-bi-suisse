@@ -35,9 +35,11 @@ def test_26_cantons():
 def test_valeurs_positives_et_coherentes():
     for r in rows("fact_offre.csv"):
         assert int(r["nuitees_chambres"]) <= int(r["chambres"]) * 31
-        if r["capacite_chambres_jours"]:
-            # la capacité est reconstituée à partir d'un taux arrondi à 0,1 point : tolérance de 2 %
-            assert int(r["capacite_chambres_jours"]) <= int(r["chambres"]) * 31 * 1.02
+        if r["capacite_chambres_jours"] and r["taux_occ_chambres_ofs"]:
+            # la capacité est reconstituée à partir d'un taux arrondi à 0,1 point : l'erreur relative
+            # peut atteindre 0,05 / taux (forte quand le taux est bas, en basse saison)
+            tolerance = 1.01 + 0.05 / float(r["taux_occ_chambres_ofs"])
+            assert int(r["capacite_chambres_jours"]) <= int(r["chambres"]) * 31 * tolerance
         assert int(r["lits"]) >= int(r["chambres"]) > 0
 
 
