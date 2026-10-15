@@ -12,6 +12,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,6 +76,8 @@ def main() -> None:
     ax.text(an_ge.index[-1] + 0.3, 100 * an_ge.iloc[-1] / an_ge[2019], "Genève", color=RED, va="center", fontsize=9, fontweight="bold")
     ax.set_title("Nuitées hôtelières, indice 100 = 2019")
     ax.set_xlim(an.index[0], an.index[-1] + 2)
+    ax.xaxis.set_major_locator(matplotlib.ticker.MultipleLocator(5))
+    ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
     ax.set_ylabel("")
     fig.savefig(IMG / "01_tendance.png")
     plt.close(fig)
@@ -93,9 +96,10 @@ def main() -> None:
     ax.barh(by["abreviation"], by["niveau"] - 100, left=100, color=colors, height=0.7)
     ax.axvline(100, color=INK, lw=1)
     for i, (v, c) in enumerate(zip(by["niveau"], by["canton_id"])):
-        ax.text(v + (0.8 if v >= 100 else -0.8), i, f"{v:.0f}", va="center", ha="left" if v >= 100 else "right",
+        ax.text(v + (0.5 if v >= 100 else -0.5), i, f"{v:.0f}", va="center", ha="left" if v >= 100 else "right",
                 fontsize=8, color=RED if c == GE else SLATE, fontweight="bold" if c == GE else "normal")
     ax.set_title(f"Nuitées {full_year} par canton, indice 100 = 2019")
+    ax.set_xlim(min(by["niveau"].min() - 4, 96), by["niveau"].max() + 4)
     ax.grid(axis="y", visible=False)
     fig.savefig(IMG / "02_reprise_cantons.png")
     plt.close(fig)
@@ -146,7 +150,7 @@ def main() -> None:
     ax.plot(x, occ_ge.reindex(x), color=RED, lw=2.4, marker="o", ms=4)
     ax.text(12.25, occ_ch[12], "Suisse", color=SLATE, va="center", fontsize=9)
     ax.text(12.25, occ_ge[12], "Genève", color=RED, va="center", fontsize=9, fontweight="bold")
-    ax.set_xticks(x, [mm[:3] + "." for mm in fr_mois])
+    ax.set_xticks(x, ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."])
     ax.set_xlim(0.6, 13.2)
     ax.yaxis.set_major_formatter(lambda v, _: f"{v:.0f} %")
     ax.set_title(f"Taux d'occupation des chambres par mois, moyenne {full_year - 2}-{full_year}")
