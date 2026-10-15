@@ -185,6 +185,8 @@ def column(table: str, name: str, dtype: str, *, hidden=False, fmt=None, summari
         lines.append("\t\tisKey")
     if hidden:
         lines.append("\t\tisHidden")
+    if hidden and table.startswith("fact_"):
+        lines.append("\t\tisAvailableInMdx: false")
     if fmt:
         lines.append(f"\t\tformatString: {fmt}")
     lines.append(f"\t\tlineageTag: {guid(table, name)}")
@@ -267,7 +269,7 @@ def build_model() -> None:
     write(d / "tables" / "fact_offre.tmdl", m_table("fact_offre", [
         ("canton_id", "string", hid),
         *[(c, "int64", {**sm, "hidden": True}) for c in offre_num],
-        ("taux_occ_chambres_ofs", "double", {"hidden": True}), ("taux_occ_lits_ofs", "double", {"hidden": True}),
+        ("taux_occ_chambres_ofs", "decimal", {"hidden": True}), ("taux_occ_lits_ofs", "decimal", {"hidden": True}),
         ("date", "dateTime", {"hidden": True, "fmt": "Short Date"}),
     ], "fact_offre.m", "Offre : capacité et occupation par mois et canton."))
 
@@ -300,6 +302,8 @@ def build_model() -> None:
         if fmt:
             mes.append(f"\t\tformatString: {fmt}")
         mes += [f"\t\tdisplayFolder: {folder}", f"\t\tlineageTag: {guid(M, n)}", ""]
+        if not fmt:   # mesure texte : pas de format numérique à définir
+            mes += ['\t\tannotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES"]}', ""]
     mes.append(column(M, "Colonne", "int64", hidden=True, fmt="0", source="[Colonne]", inferred=True))
     mes += [f"\tpartition {M} = calculated", "\t\tmode: import", '\t\tsource = ROW ( "Colonne", 0 )', ""]
     write(d / "tables" / f"{M}.tmdl", "\n".join(mes))

@@ -9,5 +9,8 @@ foreach (var t in Model.Tables) {
     }
 }
 if (!Model.Tables["Calendrier"].DataCategory.Equals("Time")) { Error("Calendrier non marqué comme table de dates"); errors++; }
+var resume = string.Format("Modèle chargé : {0} tables, {1} relations, {2} mesures, {3} erreur(s)",
+    Model.Tables.Count, Model.Relationships.Count, Model.AllMeasures.Count(), errors);
+System.IO.File.WriteAllText("model-check.txt", errors + "\n" + resume);
 Info(string.Format("Modèle chargé : {0} tables, {1} relations, {2} mesures, {3} erreur(s)",
     Model.Tables.Count, Model.Relationships.Count, Model.AllMeasures.Count(), errors));

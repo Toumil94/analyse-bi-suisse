@@ -5,6 +5,7 @@ table fact_demande
 	column canton_id
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 187957d5-8668-5c59-92e4-59113c123b23
 		summarizeBy: none
 		sourceColumn: canton_id
@@ -14,6 +15,7 @@ table fact_demande
 	column pays_id
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: c289dfe8-db2f-5b82-a0bf-a1bc640e6121
 		summarizeBy: none
 		sourceColumn: pays_id
@@ -23,6 +25,7 @@ table fact_demande
 	column arrivees
 		dataType: int64
 		isHidden
+		isAvailableInMdx: false
 		formatString: #,0
 		lineageTag: 65e3693d-25d2-5749-93ae-aa36ad511a29
 		summarizeBy: sum
@@ -33,6 +36,7 @@ table fact_demande
 	column nuitees
 		dataType: int64
 		isHidden
+		isAvailableInMdx: false
 		formatString: #,0
 		lineageTag: 7045950f-e15d-5ef8-97c9-2a4ca0d406d3
 		summarizeBy: sum
@@ -43,6 +47,7 @@ table fact_demande
 	column 'date'
 		dataType: dateTime
 		isHidden
+		isAvailableInMdx: false
 		formatString: Short Date
 		lineageTag: 4a1bd81b-dd26-5809-9586-f039f0c85780
 		summarizeBy: none

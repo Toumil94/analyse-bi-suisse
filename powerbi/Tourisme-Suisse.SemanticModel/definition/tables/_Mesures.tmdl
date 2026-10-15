@@ -159,15 +159,21 @@ table _Mesures
 		displayFolder: Affichage
 		lineageTag: 0f131d95-6d23-56e7-87f7-d196198becc8
 
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES"]}
+
 	/// Fraîcheur des données.
 	measure 'Dernier mois disponible' = "Données OFS jusqu'à " & FORMAT ( CALCULATE ( MAX ( fact_offre[date] ), REMOVEFILTERS () ), "mmmm yyyy" )
 		displayFolder: Affichage
 		lineageTag: 644cfe3e-2462-52a9-8123-6bbb7e7819ef
 
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES"]}
+
 	/// Met Genève en rouge dans les classements.
 	measure 'Couleur canton' = IF ( SELECTEDVALUE ( dim_canton[canton] ) = "Genève", "#D52B1E", "#B9BEC4" )
 		displayFolder: Affichage
 		lineageTag: 3b265159-016f-5b77-a932-5afc80929d29
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES"]}
 
 	column Colonne
 		dataType: int64

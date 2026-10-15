@@ -10,7 +10,7 @@ let
         {"etablissements", Int64.Type}, {"chambres", Int64.Type}, {"lits", Int64.Type},
         {"arrivees", Int64.Type}, {"nuitees", Int64.Type}, {"nuitees_chambres", Int64.Type},
         {"capacite_chambres_jours", Int64.Type}, {"capacite_lits_jours", Int64.Type},
-        {"taux_occ_chambres_ofs", type number}, {"taux_occ_lits_ofs", type number}}, "en-US"),
+        {"taux_occ_chambres_ofs", Currency.Type}, {"taux_occ_lits_ofs", Currency.Type}}, "en-US"),
     AvecDate = Table.AddColumn(Types, "date", each #date(Number.FromText(Text.Start([date_key], 4)), Number.FromText(Text.Middle([date_key], 4, 2)), 1), type date),
     SansCle = Table.RemoveColumns(AvecDate, {"date_key"})
 in

@@ -16,8 +16,8 @@ jobs:
     name: Rapport (PBIR) conforme aux schémas Microsoft
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install jsonschema
@@ -32,7 +32,7 @@ jobs:
     name: Modèle (TMDL) chargé par Tabular Editor
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Télécharger Tabular Editor 2 (gratuit, open source)
         shell: pwsh
         run: |
@@ -43,7 +43,11 @@ jobs:
         shell: pwsh
         run: |
           $p = Start-Process te\TabularEditor.exe -ArgumentList '"powerbi\Tourisme-Suisse.SemanticModel\definition" -S "powerbi\ci\check-model.csx" -G' -NoNewWindow -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw "Le modèle ne se charge pas ou un contrôle a échoué" }
+          if ($p.ExitCode -ne 0 -or !(Test-Path model-check.txt)) { throw "Le modèle ne se charge pas" }
+          $r = Get-Content model-check.txt
+          "### $($r[1])" >> $env:GITHUB_STEP_SUMMARY
+          Write-Host $r[1]
+          if ([int]$r[0] -ne 0) { throw "Contrôles du modèle en échec" }
       - name: Bonnes pratiques Microsoft (information)
         continue-on-error: true
         shell: pwsh
