@@ -1,0 +1,52 @@
+name: Rapport Power BI
+
+on:
+  push:
+    branches: [main]
+    paths: ["powerbi/**", ".github/workflows/powerbi.yml"]
+  pull_request:
+    paths: ["powerbi/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rapport:
+    name: Rapport (PBIR) conforme aux schémas Microsoft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema
+      - name: Le projet versionné correspond bien au générateur
+        run: |
+          python powerbi/build_pbip.py
+          git diff --exit-code -- powerbi
+      - name: Validation JSON (schémas developer.microsoft.com)
+        run: python powerbi/validate_pbip.py
+
+  modele:
+    name: Modèle (TMDL) chargé par Tabular Editor
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger Tabular Editor 2 (gratuit, open source)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://github.com/TabularEditor/TabularEditor/releases/latest/download/TabularEditor.Portable.zip -OutFile te.zip
+          Expand-Archive te.zip -DestinationPath te
+          Invoke-WebRequest https://raw.githubusercontent.com/microsoft/Analysis-Services/master/BestPracticeRules/BPARules.json -OutFile bpa.json
+      - name: Charger le modèle et lancer les contrôles
+        shell: pwsh
+        run: |
+          $p = Start-Process te\TabularEditor.exe -ArgumentList '"powerbi\Tourisme-Suisse.SemanticModel\definition" -S "powerbi\ci\check-model.csx" -G' -NoNewWindow -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Le modèle ne se charge pas ou un contrôle a échoué" }
+      - name: Bonnes pratiques Microsoft (information)
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $p = Start-Process te\TabularEditor.exe -ArgumentList '"powerbi\Tourisme-Suisse.SemanticModel\definition" -A bpa.json -G' -NoNewWindow -Wait -PassThru
+          exit $p.ExitCode

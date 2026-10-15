@@ -1,91 +1,85 @@
 // =============================================================================
 // Mesures DAX du rapport « Tourisme hôtelier en Suisse »
-// À créer dans une table vide nommée _Mesures (Accueil > Entrer des données > OK).
-// Chaque bloc : nom de la mesure = formule. Format conseillé en commentaire.
+// Fichier généré par build_pbip.py : elles sont déjà dans Tourisme-Suisse.pbip.
 // =============================================================================
 
-
-// ----- Table calendrier (Modélisation > Nouvelle table) -----------------------
-// Puis : clic droit sur la table > Marquer comme table de dates > colonne [Date].
+// ----- Table calendrier (table calculée, marquée comme table de dates) -----
 // Les faits sont mensuels (au 1er du mois) : un calendrier journalier continu est
 // nécessaire pour que les fonctions d'intelligence temporelle fonctionnent.
 
-Calendrier =
-ADDCOLUMNS (
-    CALENDAR ( DATE ( 2005, 1, 1 ), EOMONTH ( MAX ( fact_offre[date] ), 0 ) ),
-    "Année", YEAR ( [Date] ),
-    "Mois", MONTH ( [Date] ),
-    "Mois nom", FORMAT ( [Date], "mmm" ),
-    "Année-mois", FORMAT ( [Date], "yyyy-mm" ),
-    "Trimestre", "T" & QUARTER ( [Date] ),
-    "Saison", IF ( MONTH ( [Date] ) IN { 11, 12, 1, 2, 3, 4 }, "Hiver", "Été" ),
-    "Période COVID",
-        SWITCH (
-            TRUE (),
-            [Date] < DATE ( 2020, 3, 1 ), "1. Avant COVID",
-            [Date] <= DATE ( 2021, 12, 31 ), "2. COVID",
-            "3. Après COVID"
-        )
+Calendrier = CALENDAR ( DATE ( 2005, 1, 1 ), EOMONTH ( MAX ( fact_offre[date] ), 0 ) )
+Calendrier[Année] = YEAR ( [Date] )
+Calendrier[Mois] = MONTH ( [Date] )
+Calendrier[Mois nom] = FORMAT ( [Date], "mmm" )
+Calendrier[Mois début] = DATE ( YEAR ( [Date] ), MONTH ( [Date] ), 1 )
+Calendrier[Année-mois] = FORMAT ( [Date], "yyyy-mm" )
+Calendrier[Trimestre] = "T" & QUARTER ( [Date] )
+Calendrier[Saison] = IF ( MONTH ( [Date] ) IN { 11, 12, 1, 2, 3, 4 }, "Hiver", "Été" )
+Calendrier[Période COVID] = SWITCH (
+    TRUE (),
+    [Date] < DATE ( 2020, 3, 1 ), "1. Avant COVID",
+    [Date] <= DATE ( 2021, 12, 31 ), "2. COVID",
+    "3. Après COVID"
 )
 
+// ----- Volumes ---------------------------------------------------------------
 
-// ----- Volumes -----------------------------------------------------------------
+// Nombre de nuits passées à l'hôtel.  (format : #,0)
+Nuitées = SUM ( fact_demande[nuitees] )
 
-Nuitées = SUM ( fact_demande[nuitees] )                                   // format : nombre entier, séparateur de milliers
+// Nombre de clients arrivés.  (format : #,0)
+Arrivées = SUM ( fact_demande[arrivees] )
 
-Arrivées = SUM ( fact_demande[arrivees] )                                 // format : nombre entier
+// Nuitées par arrivée, en nuits.  (format : 0.00)
+Durée moyenne de séjour = DIVIDE ( [Nuitées], [Arrivées] )
 
-Durée moyenne de séjour =                                                  // format : décimal, 2 décimales (nuits)
-DIVIDE ( [Nuitées], [Arrivées] )
+// Nuitées des clients domiciliés hors de Suisse.  (format : #,0)
+Nuitées étrangères = CALCULATE ( [Nuitées], dim_pays[continent] <> "Suisse" )
 
-Nuitées étrangères =
-CALCULATE ( [Nuitées], dim_pays[continent] <> "Suisse" )
+// Part des nuitées faites par des clients domiciliés à l'étranger.  (format : 0.0%)
+Part des visiteurs étrangers = DIVIDE ( [Nuitées étrangères], [Nuitées] )
 
-Part des visiteurs étrangers =                                             // format : pourcentage, 1 décimale
-DIVIDE ( [Nuitées étrangères], [Nuitées] )
+// ----- Occupation ------------------------------------------------------------
 
+// Recalculé à partir de ses composantes (jamais une moyenne de taux) : retrouve le taux publié par l'OFS.  (format : 0.0%)
+Taux d'occupation des chambres = DIVIDE ( SUM ( fact_offre[nuitees_chambres] ), SUM ( fact_offre[capacite_chambres_jours] ) )
 
-// ----- Capacité et occupation ----------------------------------------------------
-// On ne fait jamais la moyenne de taux : on recalcule le taux à partir de ses composantes,
-// sinon un petit canton pèserait autant que Zurich.
+// Nuitées rapportées aux lits-jours offerts.  (format : 0.0%)
+Taux d'occupation des lits = DIVIDE ( SUM ( fact_offre[nuitees] ), SUM ( fact_offre[capacite_lits_jours] ) )
 
-Taux d'occupation des chambres =                                           // format : pourcentage, 1 décimale
-DIVIDE ( SUM ( fact_offre[nuitees_chambres] ), SUM ( fact_offre[capacite_chambres_jours] ) )
+// Même taux, tous cantons confondus, pour comparer.  (format : 0.0%)
+Taux d'occupation des chambres (Suisse) = CALCULATE ( [Taux d'occupation des chambres], REMOVEFILTERS ( dim_canton ) )
 
-Taux d'occupation des lits =                                               // format : pourcentage, 1 décimale
-DIVIDE ( SUM ( fact_offre[nuitees] ), SUM ( fact_offre[capacite_lits_jours] ) )
+// Nombre moyen de chambres offertes par mois.  (format : #,0)
+Chambres offertes (moyenne mensuelle) = AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[chambres] ) ) )
 
-Chambres offertes (moyenne mensuelle) =                                    // format : nombre entier
-AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[chambres] ) ) )
+// Nombre moyen d'hôtels ouverts par mois.  (format : #,0)
+Établissements ouverts (moyenne mensuelle) = AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[etablissements] ) ) )
 
-Établissements ouverts (moyenne mensuelle) =
-AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[etablissements] ) ) )
+// En points de pourcentage.  (format : +0.0;-0.0;0.0)
+Écart d'occupation vs Suisse (points) = ( [Taux d'occupation des chambres] - [Taux d'occupation des chambres (Suisse)] ) * 100
 
-Écart d'occupation vs Suisse (points) =                                    // format : décimal, 1 décimale
-( [Taux d'occupation des chambres]
-    - CALCULATE ( [Taux d'occupation des chambres], REMOVEFILTERS ( dim_canton ) ) ) * 100
+// ----- Temps -----------------------------------------------------------------
 
+// Mêmes jours, un an plus tôt.  (format : #,0)
+Nuitées A-1 = CALCULATE ( [Nuitées], SAMEPERIODLASTYEAR ( Calendrier[Date] ) )
 
-// ----- Intelligence temporelle ---------------------------------------------------
+// Variation par rapport à la même période de l'année précédente.  (format : +0.0%;-0.0%;0.0%)
+Évolution vs A-1 = DIVIDE ( [Nuitées] - [Nuitées A-1], [Nuitées A-1] )
 
-Nuitées A-1 =
-CALCULATE ( [Nuitées], SAMEPERIODLASTYEAR ( Calendrier[Date] ) )
+// Depuis le 1er janvier.  (format : #,0)
+Nuitées cumul annuel = TOTALYTD ( [Nuitées], Calendrier[Date] )
 
-Évolution vs A-1 =                                                         // format : pourcentage, 1 décimale
-DIVIDE ( [Nuitées] - [Nuitées A-1], [Nuitées A-1] )
+// Somme des 12 derniers mois : lisse la saisonnalité (vide avant décembre 2005).  (format : #,0)
+Nuitées 12 mois glissants = VAR Fin = MAX ( Calendrier[Date] )
+RETURN
+    IF (
+        Fin >= DATE ( 2005, 12, 31 ),
+        CALCULATE ( [Nuitées], DATESINPERIOD ( Calendrier[Date], Fin, -12, MONTH ) )
+    )
 
-Nuitées cumul annuel =
-TOTALYTD ( [Nuitées], Calendrier[Date] )
-
-Nuitées 12 mois glissants =
-CALCULATE (
-    [Nuitées],
-    DATESINPERIOD ( Calendrier[Date], MAX ( Calendrier[Date] ), -12, MONTH )
-)
-
-// Même période de 2019 (dernière année avant le COVID) : mêmes mois que le contexte courant.
-Nuitées même période 2019 =
-VAR MoisSelectionnes = VALUES ( Calendrier[Mois] )
+// Mêmes mois de 2019, dernière année avant le COVID.  (format : #,0)
+Nuitées même période 2019 = VAR MoisSelectionnes = VALUES ( Calendrier[Mois] )
 RETURN
     CALCULATE (
         [Nuitées],
@@ -94,39 +88,39 @@ RETURN
         TREATAS ( MoisSelectionnes, Calendrier[Mois] )
     )
 
-Niveau vs 2019 =                                                           // format : pourcentage, 0 décimale (100 % = niveau 2019 retrouvé)
-DIVIDE ( [Nuitées], [Nuitées même période 2019] )
+// 100 % = niveau d'avant crise retrouvé.  (format : 0%)
+Niveau vs 2019 = DIVIDE ( [Nuitées], [Nuitées même période 2019] )
 
+// ----- Parts -----------------------------------------------------------------
 
-// ----- Parts et classements -------------------------------------------------------
+// Part des nuitées suisses.  (format : 0.0%)
+Part de marché du canton = DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_canton ) ) )
 
-Part de marché du canton =                                                 // format : pourcentage, 1 décimale
-DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_canton ) ) )
+// Part des nuitées du canton.  (format : 0.0%)
+Part du marché de provenance = DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_pays ) ) )
 
-Part du marché de provenance =                                             // format : pourcentage, 1 décimale
-DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_pays ) ) )
-
-Rang du canton =
-IF (
+// Classement par nuitées.  (format : 0)
+Rang du canton = IF (
     HASONEVALUE ( dim_canton[canton] ),
     RANKX ( ALL ( dim_canton[canton] ), [Nuitées], , DESC, DENSE )
 )
 
-// Combien un marché a contribué à la croissance totale (en points de %).
-Contribution à la croissance =                                             // format : pourcentage, 1 décimale
-DIVIDE (
+// Points de croissance apportés par un marché.  (format : +0.0%;-0.0%;0.0%)
+Contribution à la croissance = DIVIDE (
     [Nuitées] - [Nuitées A-1],
     CALCULATE ( [Nuitées A-1], REMOVEFILTERS ( dim_pays ) )
 )
 
+// ----- Affichage -------------------------------------------------------------
 
-// ----- Titres dynamiques ----------------------------------------------------------
-
-Titre période =
-VAR Debut = MIN ( Calendrier[Date] )
+// Sous-titre dynamique des pages.
+Titre période = VAR Debut = CALCULATE ( MIN ( fact_offre[date] ), ALLSELECTED ( Calendrier ) )
 VAR Fin = CALCULATE ( MAX ( fact_offre[date] ), ALLSELECTED ( Calendrier ) )
 RETURN
-    "De " & FORMAT ( Debut, "mmmm yyyy" ) & " à " & FORMAT ( Fin, "mmmm yyyy" )
+    SELECTEDVALUE ( dim_canton[canton], "Suisse" ) & " · de " & FORMAT ( Debut, "mmmm yyyy" ) & " à " & FORMAT ( Fin, "mmmm yyyy" )
 
-Dernier mois disponible =
-"Données OFS jusqu'à " & FORMAT ( CALCULATE ( MAX ( fact_offre[date] ), REMOVEFILTERS () ), "mmmm yyyy" )
+// Fraîcheur des données.
+Dernier mois disponible = "Données OFS jusqu'à " & FORMAT ( CALCULATE ( MAX ( fact_offre[date] ), REMOVEFILTERS () ), "mmmm yyyy" )
+
+// Met Genève en rouge dans les classements.
+Couleur canton = IF ( SELECTEDVALUE ( dim_canton[canton] ) = "Genève", "#D52B1E", "#B9BEC4" )

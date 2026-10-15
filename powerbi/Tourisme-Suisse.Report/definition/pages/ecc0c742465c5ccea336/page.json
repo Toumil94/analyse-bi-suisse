@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "ecc0c742465c5ccea336",
+  "displayName": "Marchés",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "d6451a158a7e5397b22c",
+      "target": "32ea8f734dc950a08949",
+      "type": "NoFilter"
+    }
+  ]
+}

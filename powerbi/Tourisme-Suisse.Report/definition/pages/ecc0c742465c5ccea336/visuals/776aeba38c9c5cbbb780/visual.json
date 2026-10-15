@@ -1,0 +1,153 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "776aeba38c9c5cbbb780",
+  "position": {
+    "x": 336,
+    "y": 112,
+    "z": 8000,
+    "height": 300,
+    "width": 920,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_pays"
+                    }
+                  },
+                  "Property": "continent"
+                }
+              },
+              "queryRef": "dim_pays.continent",
+              "nativeQueryRef": "continent",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_pays"
+                    }
+                  },
+                  "Property": "marche"
+                }
+              },
+              "queryRef": "dim_pays.marche",
+              "nativeQueryRef": "marche",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Nuitées"
+                }
+              },
+              "queryRef": "_Mesures.Nuitées",
+              "nativeQueryRef": "Nuitées"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Part du marché de provenance"
+                }
+              },
+              "queryRef": "_Mesures.Part du marché de provenance",
+              "nativeQueryRef": "Part du marché de provenance"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Niveau vs 2019"
+                }
+              },
+              "queryRef": "_Mesures.Niveau vs 2019",
+              "nativeQueryRef": "Niveau vs 2019"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Contribution à la croissance"
+                }
+              },
+              "queryRef": "_Mesures.Contribution à la croissance",
+              "nativeQueryRef": "Contribution à la croissance"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Mesures"
+                  }
+                },
+                "Property": "Nuitées"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Poids, reprise et contribution de chaque marché'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

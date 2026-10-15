@@ -1,0 +1,142 @@
+/// Offre : capacité et occupation par mois et canton.
+table fact_offre
+	lineageTag: 4bcb3105-fbb6-59c5-ba6b-1549c71e5155
+
+	column canton_id
+		dataType: string
+		isHidden
+		lineageTag: c2c79ab0-ed28-51c5-a8a3-da91a3808111
+		summarizeBy: none
+		sourceColumn: canton_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column etablissements
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 8d36a5d2-cec9-501d-93d6-fcf4c929cfda
+		summarizeBy: sum
+		sourceColumn: etablissements
+
+		annotation SummarizationSetBy = Automatic
+
+	column chambres
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: b67d8dc7-0a7a-5219-84b4-3f27711a2396
+		summarizeBy: sum
+		sourceColumn: chambres
+
+		annotation SummarizationSetBy = Automatic
+
+	column lits
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 29485291-318b-5e4b-b818-0261f335fef1
+		summarizeBy: sum
+		sourceColumn: lits
+
+		annotation SummarizationSetBy = Automatic
+
+	column arrivees
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 9ebc8c0f-36e0-5ce4-a50d-d192acc3aad4
+		summarizeBy: sum
+		sourceColumn: arrivees
+
+		annotation SummarizationSetBy = Automatic
+
+	column nuitees
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: bb136125-5027-5114-9024-657e4ddde78c
+		summarizeBy: sum
+		sourceColumn: nuitees
+
+		annotation SummarizationSetBy = Automatic
+
+	column nuitees_chambres
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 3edbe179-fa44-5c36-a2ed-84bc4b336ba8
+		summarizeBy: sum
+		sourceColumn: nuitees_chambres
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacite_chambres_jours
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 1b0214a5-b042-5b61-a820-3fae539888a2
+		summarizeBy: sum
+		sourceColumn: capacite_chambres_jours
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacite_lits_jours
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 555ed443-0f63-5739-8a19-08032c461670
+		summarizeBy: sum
+		sourceColumn: capacite_lits_jours
+
+		annotation SummarizationSetBy = Automatic
+
+	column taux_occ_chambres_ofs
+		dataType: double
+		isHidden
+		lineageTag: 7d6e26f0-7086-5da4-a9fb-090dc422308c
+		summarizeBy: none
+		sourceColumn: taux_occ_chambres_ofs
+
+		annotation SummarizationSetBy = Automatic
+
+	column taux_occ_lits_ofs
+		dataType: double
+		isHidden
+		lineageTag: 51e1fdfb-89f9-5045-ab6d-4a2bd82a06c8
+		summarizeBy: none
+		sourceColumn: taux_occ_lits_ofs
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'date'
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 4af6b2cd-3829-5111-aa70-ec138813e5cb
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition fact_offre = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents(BaseUrl, [RelativePath = "fact_offre.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Vides = Table.TransformColumns(Entetes, {}, each if _ = "" then null else _),
+				    Types = Table.TransformColumnTypes(Vides, {
+				        {"date_key", type text}, {"canton_id", type text},
+				        {"etablissements", Int64.Type}, {"chambres", Int64.Type}, {"lits", Int64.Type},
+				        {"arrivees", Int64.Type}, {"nuitees", Int64.Type}, {"nuitees_chambres", Int64.Type},
+				        {"capacite_chambres_jours", Int64.Type}, {"capacite_lits_jours", Int64.Type},
+				        {"taux_occ_chambres_ofs", type number}, {"taux_occ_lits_ofs", type number}}, "en-US"),
+				    AvecDate = Table.AddColumn(Types, "date", each #date(Number.FromText(Text.Start([date_key], 4)), Number.FromText(Text.Middle([date_key], 4, 2)), 1), type date),
+				    SansCle = Table.RemoveColumns(AvecDate, {"date_key"})
+				in
+				    SansCle
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "c3bdbbe8513c5a26b548",
+  "displayName": "Saisonnalité",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "e6e5c1496f5f50ae9b0f",
+      "target": "ebb4651ffbda5cfa924f",
+      "type": "NoFilter"
+    }
+  ]
+}

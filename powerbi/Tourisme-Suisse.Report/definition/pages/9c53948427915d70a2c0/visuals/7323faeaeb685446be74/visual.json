@@ -1,0 +1,115 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "7323faeaeb685446be74",
+  "position": {
+    "x": 436,
+    "y": 424,
+    "z": 7000,
+    "height": 256,
+    "width": 820,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_canton"
+                    }
+                  },
+                  "Property": "abreviation"
+                }
+              },
+              "queryRef": "dim_canton.abreviation",
+              "nativeQueryRef": "abreviation",
+              "active": true
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Taux d'occupation des chambres"
+                }
+              },
+              "queryRef": "_Mesures.Taux d'occupation des chambres",
+              "nativeQueryRef": "Taux d'occupation des chambres"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Évolution vs A-1"
+                }
+              },
+              "queryRef": "_Mesures.Évolution vs A-1",
+              "nativeQueryRef": "Évolution vs A-1"
+            }
+          ]
+        },
+        "Size": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Nuitées"
+                }
+              },
+              "queryRef": "_Mesures.Nuitées",
+              "nativeQueryRef": "Nuitées"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Occupation (X) et croissance (Y) : en haut à droite, les cantons pleins et en croissance'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

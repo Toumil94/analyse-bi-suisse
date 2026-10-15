@@ -1,0 +1,84 @@
+{
+  "name": "Lyes Toumi - Suisse",
+  "dataColors": [
+    "#2A78D6",
+    "#EB6834",
+    "#1BAF7A",
+    "#EDA100",
+    "#E87BA4",
+    "#008300",
+    "#6250D6",
+    "#59626D"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#16191D",
+  "tableAccent": "#D52B1E",
+  "good": "#0CA30C",
+  "neutral": "#EDA100",
+  "bad": "#D03B3B",
+  "maximum": "#0D366B",
+  "center": "#86B6EF",
+  "minimum": "#CDE2FB",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 14,
+      "color": "#16191D"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#16191D"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#59626D"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 28,
+      "color": "#16191D"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ],
+        "visualHeader": [
+          {
+            "show": true
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F3F4F1"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

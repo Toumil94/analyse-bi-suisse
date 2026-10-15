@@ -1,0 +1,162 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "4db6095ec3ae51e59f0e",
+  "position": {
+    "x": 436,
+    "y": 112,
+    "z": 6000,
+    "height": 300,
+    "width": 820,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_canton"
+                    }
+                  },
+                  "Property": "canton"
+                }
+              },
+              "queryRef": "dim_canton.canton",
+              "nativeQueryRef": "canton",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Nuitées"
+                }
+              },
+              "queryRef": "_Mesures.Nuitées",
+              "nativeQueryRef": "Nuitées"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Part de marché du canton"
+                }
+              },
+              "queryRef": "_Mesures.Part de marché du canton",
+              "nativeQueryRef": "Part de marché du canton"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Rang du canton"
+                }
+              },
+              "queryRef": "_Mesures.Rang du canton",
+              "nativeQueryRef": "Rang du canton"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Taux d'occupation des chambres"
+                }
+              },
+              "queryRef": "_Mesures.Taux d'occupation des chambres",
+              "nativeQueryRef": "Taux d'occupation des chambres"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Écart d'occupation vs Suisse (points)"
+                }
+              },
+              "queryRef": "_Mesures.Écart d'occupation vs Suisse (points)",
+              "nativeQueryRef": "Écart d'occupation vs Suisse (points)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Durée moyenne de séjour"
+                }
+              },
+              "queryRef": "_Mesures.Durée moyenne de séjour",
+              "nativeQueryRef": "Durée moyenne de séjour"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Mesures"
+                  }
+                },
+                "Property": "Nuitées"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Indicateurs par canton'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

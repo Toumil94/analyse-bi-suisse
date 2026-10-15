@@ -1,0 +1,19 @@
+relationship 3a1c89f9-965f-5b5f-8622-65cb7e43a62d
+	fromColumn: fact_demande.'date'
+	toColumn: Calendrier.'Date'
+
+relationship 75641928-d895-57d8-a7c4-aa5142d619b4
+	fromColumn: fact_offre.'date'
+	toColumn: Calendrier.'Date'
+
+relationship 98d74e9c-80fd-5e04-8054-0e12019cbb0e
+	fromColumn: fact_demande.canton_id
+	toColumn: dim_canton.canton_id
+
+relationship 118ba43e-3df9-5cef-9746-0d3d2fd4e142
+	fromColumn: fact_offre.canton_id
+	toColumn: dim_canton.canton_id
+
+relationship 3546003a-528e-5df9-849b-6ab7a3a1770b
+	fromColumn: fact_demande.pays_id
+	toColumn: dim_pays.pays_id

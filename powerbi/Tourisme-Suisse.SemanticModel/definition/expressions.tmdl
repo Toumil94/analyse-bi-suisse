@@ -1,0 +1,5 @@
+/// D'où viennent les données : GitHub par défaut (mises à jour chaque mois par GitHub Actions).
+expression BaseUrl = "https://raw.githubusercontent.com/Toumil94/analyse-bi-suisse/main/data/" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 97ae2c79-8fce-5374-a70d-697f33bf8a2e
+
+	annotation PBI_ResultType = Text

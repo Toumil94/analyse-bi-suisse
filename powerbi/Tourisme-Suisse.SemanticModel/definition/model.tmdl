@@ -1,0 +1,21 @@
+model Model
+	culture: fr-FR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: fr-CH
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["BaseUrl","fact_demande","fact_offre","dim_canton","dim_pays"]
+
+ref table Calendrier
+ref table fact_demande
+ref table fact_offre
+ref table dim_canton
+ref table dim_pays
+ref table _Mesures
+
+ref cultureInfo fr-FR

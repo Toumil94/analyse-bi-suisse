@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Tourisme-Suisse"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "228d0144-8cab-5fc1-9b85-e56b26255bc3"
+  }
+}

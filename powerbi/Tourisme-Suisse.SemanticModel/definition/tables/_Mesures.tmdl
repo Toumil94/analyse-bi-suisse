@@ -1,0 +1,185 @@
+/// Toutes les mesures du rapport.
+table _Mesures
+	lineageTag: 1540eb57-9e38-5e7c-8673-9dd22e4c7921
+
+	/// Nombre de nuits passées à l'hôtel.
+	measure 'Nuitées' = SUM ( fact_demande[nuitees] )
+		formatString: #,0
+		displayFolder: Volumes
+		lineageTag: aaa0cbca-5bc9-5072-954f-edf983111b1d
+
+	/// Nombre de clients arrivés.
+	measure 'Arrivées' = SUM ( fact_demande[arrivees] )
+		formatString: #,0
+		displayFolder: Volumes
+		lineageTag: 86762048-5203-5905-acdc-6a2dd3d003f8
+
+	/// Nuitées par arrivée, en nuits.
+	measure 'Durée moyenne de séjour' = DIVIDE ( [Nuitées], [Arrivées] )
+		formatString: 0.00
+		displayFolder: Volumes
+		lineageTag: 5c1ec798-59b5-5922-b22b-08e9cc6644de
+
+	/// Nuitées des clients domiciliés hors de Suisse.
+	measure 'Nuitées étrangères' = CALCULATE ( [Nuitées], dim_pays[continent] <> "Suisse" )
+		formatString: #,0
+		displayFolder: Volumes
+		lineageTag: a257fdfa-7cd9-5bd1-82dc-0a9ceda7718d
+
+	/// Part des nuitées faites par des clients domiciliés à l'étranger.
+	measure 'Part des visiteurs étrangers' = DIVIDE ( [Nuitées étrangères], [Nuitées] )
+		formatString: 0.0%
+		displayFolder: Volumes
+		lineageTag: 47ac3838-23ef-5f67-93c3-0ce6be0fa246
+
+	/// Recalculé à partir de ses composantes (jamais une moyenne de taux) : retrouve le taux publié par l'OFS.
+	measure 'Taux d''occupation des chambres' = DIVIDE ( SUM ( fact_offre[nuitees_chambres] ), SUM ( fact_offre[capacite_chambres_jours] ) )
+		formatString: 0.0%
+		displayFolder: Occupation
+		lineageTag: add059fd-702d-56eb-934e-495f2845b541
+
+	/// Nuitées rapportées aux lits-jours offerts.
+	measure 'Taux d''occupation des lits' = DIVIDE ( SUM ( fact_offre[nuitees] ), SUM ( fact_offre[capacite_lits_jours] ) )
+		formatString: 0.0%
+		displayFolder: Occupation
+		lineageTag: 1f4a8324-6619-5b7e-9ba8-3fe9cda61be8
+
+	/// Même taux, tous cantons confondus, pour comparer.
+	measure 'Taux d''occupation des chambres (Suisse)' = CALCULATE ( [Taux d'occupation des chambres], REMOVEFILTERS ( dim_canton ) )
+		formatString: 0.0%
+		displayFolder: Occupation
+		lineageTag: b7e62504-7bdf-5473-893c-7755f9bffd56
+
+	/// Nombre moyen de chambres offertes par mois.
+	measure 'Chambres offertes (moyenne mensuelle)' = AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[chambres] ) ) )
+		formatString: #,0
+		displayFolder: Occupation
+		lineageTag: ff575b6f-1f38-5321-adda-39961227e79a
+
+	/// Nombre moyen d'hôtels ouverts par mois.
+	measure 'Établissements ouverts (moyenne mensuelle)' = AVERAGEX ( VALUES ( Calendrier[Année-mois] ), CALCULATE ( SUM ( fact_offre[etablissements] ) ) )
+		formatString: #,0
+		displayFolder: Occupation
+		lineageTag: e3aec689-d9f2-552b-8b40-4a350551586e
+
+	/// En points de pourcentage.
+	measure 'Écart d''occupation vs Suisse (points)' = ( [Taux d'occupation des chambres] - [Taux d'occupation des chambres (Suisse)] ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: Occupation
+		lineageTag: eedf81cc-f86d-50ae-889f-27de38940d62
+
+	/// Mêmes jours, un an plus tôt.
+	measure 'Nuitées A-1' = CALCULATE ( [Nuitées], SAMEPERIODLASTYEAR ( Calendrier[Date] ) )
+		formatString: #,0
+		displayFolder: Temps
+		lineageTag: 6b59fcfa-093c-507a-b841-1404c436b3f7
+
+	/// Variation par rapport à la même période de l'année précédente.
+	measure 'Évolution vs A-1' = DIVIDE ( [Nuitées] - [Nuitées A-1], [Nuitées A-1] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Temps
+		lineageTag: e65ae30c-de12-5bd9-a30c-be23c2830b24
+
+	/// Depuis le 1er janvier.
+	measure 'Nuitées cumul annuel' = TOTALYTD ( [Nuitées], Calendrier[Date] )
+		formatString: #,0
+		displayFolder: Temps
+		lineageTag: a2937bf7-8fa5-5c6c-8083-e6631ba127de
+
+	/// Somme des 12 derniers mois : lisse la saisonnalité (vide avant décembre 2005).
+	measure 'Nuitées 12 mois glissants' =
+			VAR Fin = MAX ( Calendrier[Date] )
+			RETURN
+			    IF (
+			        Fin >= DATE ( 2005, 12, 31 ),
+			        CALCULATE ( [Nuitées], DATESINPERIOD ( Calendrier[Date], Fin, -12, MONTH ) )
+			    )
+		formatString: #,0
+		displayFolder: Temps
+		lineageTag: a5182522-117c-5473-a7d1-4aac45e919f6
+
+	/// Mêmes mois de 2019, dernière année avant le COVID.
+	measure 'Nuitées même période 2019' =
+			VAR MoisSelectionnes = VALUES ( Calendrier[Mois] )
+			RETURN
+			    CALCULATE (
+			        [Nuitées],
+			        REMOVEFILTERS ( Calendrier ),
+			        Calendrier[Année] = 2019,
+			        TREATAS ( MoisSelectionnes, Calendrier[Mois] )
+			    )
+		formatString: #,0
+		displayFolder: Temps
+		lineageTag: ea3ca67f-077e-5c1f-a8ad-99bed00bdf97
+
+	/// 100 % = niveau d'avant crise retrouvé.
+	measure 'Niveau vs 2019' = DIVIDE ( [Nuitées], [Nuitées même période 2019] )
+		formatString: 0%
+		displayFolder: Temps
+		lineageTag: f5e5cf2b-4df9-5aee-9c42-329f2b24a483
+
+	/// Part des nuitées suisses.
+	measure 'Part de marché du canton' = DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_canton ) ) )
+		formatString: 0.0%
+		displayFolder: Parts
+		lineageTag: 9414abc9-00b9-5c1c-932e-e65ecc5aeb90
+
+	/// Part des nuitées du canton.
+	measure 'Part du marché de provenance' = DIVIDE ( [Nuitées], CALCULATE ( [Nuitées], REMOVEFILTERS ( dim_pays ) ) )
+		formatString: 0.0%
+		displayFolder: Parts
+		lineageTag: de55cc2e-aff8-5dac-be04-37cb755ba6ee
+
+	/// Classement par nuitées.
+	measure 'Rang du canton' =
+			IF (
+			    HASONEVALUE ( dim_canton[canton] ),
+			    RANKX ( ALL ( dim_canton[canton] ), [Nuitées], , DESC, DENSE )
+			)
+		formatString: 0
+		displayFolder: Parts
+		lineageTag: ea5a4b55-039e-5cae-bf2d-ce1aa5c8a451
+
+	/// Points de croissance apportés par un marché.
+	measure 'Contribution à la croissance' =
+			DIVIDE (
+			    [Nuitées] - [Nuitées A-1],
+			    CALCULATE ( [Nuitées A-1], REMOVEFILTERS ( dim_pays ) )
+			)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Parts
+		lineageTag: b1c81783-c916-5f8c-a4ed-3348620d63a0
+
+	/// Sous-titre dynamique des pages.
+	measure 'Titre période' =
+			VAR Debut = CALCULATE ( MIN ( fact_offre[date] ), ALLSELECTED ( Calendrier ) )
+			VAR Fin = CALCULATE ( MAX ( fact_offre[date] ), ALLSELECTED ( Calendrier ) )
+			RETURN
+			    SELECTEDVALUE ( dim_canton[canton], "Suisse" ) & " · de " & FORMAT ( Debut, "mmmm yyyy" ) & " à " & FORMAT ( Fin, "mmmm yyyy" )
+		displayFolder: Affichage
+		lineageTag: 0f131d95-6d23-56e7-87f7-d196198becc8
+
+	/// Fraîcheur des données.
+	measure 'Dernier mois disponible' = "Données OFS jusqu'à " & FORMAT ( CALCULATE ( MAX ( fact_offre[date] ), REMOVEFILTERS () ), "mmmm yyyy" )
+		displayFolder: Affichage
+		lineageTag: 644cfe3e-2462-52a9-8123-6bbb7e7819ef
+
+	/// Met Genève en rouge dans les classements.
+	measure 'Couleur canton' = IF ( SELECTEDVALUE ( dim_canton[canton] ) = "Genève", "#D52B1E", "#B9BEC4" )
+		displayFolder: Affichage
+		lineageTag: 3b265159-016f-5b77-a932-5afc80929d29
+
+	column Colonne
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a10dee43-df1d-50d0-b9c2-db041f906833
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Colonne]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Mesures = calculated
+		mode: import
+		source = ROW ( "Colonne", 0 )

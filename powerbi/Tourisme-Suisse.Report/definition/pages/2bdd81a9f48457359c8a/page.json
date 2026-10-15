@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "2bdd81a9f48457359c8a",
+  "displayName": "Vue d'ensemble",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "f5284c329288524382e0",
+      "target": "31582203bd895c42a2ce",
+      "type": "NoFilter"
+    },
+    {
+      "source": "f5284c329288524382e0",
+      "target": "c1a3bb5f1ea958d082da",
+      "type": "NoFilter"
+    }
+  ]
+}

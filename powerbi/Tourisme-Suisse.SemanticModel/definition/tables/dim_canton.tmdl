@@ -1,0 +1,57 @@
+/// Les 26 cantons.
+table dim_canton
+	lineageTag: e0f6c482-7486-53fd-af07-5d0b4f752682
+
+	column canton_id
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 90156ad8-0d66-5293-b145-9f373adc96de
+		summarizeBy: none
+		sourceColumn: canton_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column canton
+		dataType: string
+		lineageTag: dce5bc23-6d5a-564c-be3a-61b2529070e5
+		summarizeBy: none
+		sourceColumn: canton
+
+		annotation SummarizationSetBy = Automatic
+
+	column abreviation
+		dataType: string
+		lineageTag: 595eee3d-55a4-5346-9bb5-887951d51702
+		summarizeBy: none
+		sourceColumn: abreviation
+
+		annotation SummarizationSetBy = Automatic
+
+	column grande_region
+		dataType: string
+		lineageTag: 896064c4-8945-5d0b-82be-8d49ab699a08
+		summarizeBy: none
+		sourceColumn: grande_region
+
+		annotation SummarizationSetBy = Automatic
+
+	column langue
+		dataType: string
+		lineageTag: 8276d133-16b6-5782-b731-ac216e09bccf
+		summarizeBy: none
+		sourceColumn: langue
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_canton = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents(BaseUrl, [RelativePath = "dim_canton.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Types = Table.TransformColumnTypes(Entetes, {{"canton_id", type text}, {"canton", type text}, {"abreviation", type text}, {"grande_region", type text}, {"langue", type text}})
+				in
+				    Types
+
+	annotation PBI_ResultType = Table

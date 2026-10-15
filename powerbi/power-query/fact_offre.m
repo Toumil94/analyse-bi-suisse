@@ -1,7 +1,7 @@
 // Offre hôtelière par mois et canton : établissements, chambres, lits, nuitées-chambres
 // et capacité offerte (chambres-jours et lits-jours) reconstituée pour retrouver le taux d'occupation de l'OFS.
 let
-    Source = Csv.Document(Web.Contents(BaseUrl & "fact_offre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+    Source = Csv.Document(Web.Contents(BaseUrl, [RelativePath = "fact_offre.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
     Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
     // une cellule vide (mois sans taux publié) devient null au lieu de provoquer une erreur de type
     Vides = Table.TransformColumns(Entetes, {}, each if _ = "" then null else _),

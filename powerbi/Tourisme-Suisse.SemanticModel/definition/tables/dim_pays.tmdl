@@ -1,0 +1,49 @@
+/// Pays de provenance, marché harmonisé et continent.
+table dim_pays
+	lineageTag: 633b575c-11c1-5c38-a86f-ea8cf6d38335
+
+	column pays_id
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 6d575ad2-f9c1-557d-a98c-991016bef849
+		summarizeBy: none
+		sourceColumn: pays_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column pays
+		dataType: string
+		lineageTag: 19c238e3-659e-52f0-ae54-a348d9f8173a
+		summarizeBy: none
+		sourceColumn: pays
+
+		annotation SummarizationSetBy = Automatic
+
+	column marche
+		dataType: string
+		lineageTag: edc54e0d-9117-5dc0-873c-d96db7632ca5
+		summarizeBy: none
+		sourceColumn: marche
+
+		annotation SummarizationSetBy = Automatic
+
+	column continent
+		dataType: string
+		lineageTag: 1bafe9d5-cc84-59ea-bf19-e37bdb527ef8
+		summarizeBy: none
+		sourceColumn: continent
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_pays = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(Web.Contents(BaseUrl, [RelativePath = "dim_pays.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Entetes = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Types = Table.TransformColumnTypes(Entetes, {{"pays_id", type text}, {"pays", type text}, {"marche", type text}, {"continent", type text}})
+				in
+				    Types
+
+	annotation PBI_ResultType = Table

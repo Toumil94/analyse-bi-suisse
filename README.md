@@ -6,7 +6,7 @@ Un projet complet de **Business Intelligence et de Business Analysis** sur des d
 
 > *EN : An end-to-end BI and business analysis project on official Swiss hotel statistics: requirements, KPI dictionary, tested star schema refreshed monthly by GitHub Actions, Power BI report with DAX measures, UAT and an executive memo with recommendations.*
 
-[![Mise à jour des données](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/refresh.yml/badge.svg)](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/refresh.yml)
+[![Mise à jour des données](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/refresh.yml/badge.svg)](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/refresh.yml) [![Rapport Power BI](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/powerbi.yml/badge.svg)](https://github.com/Toumil94/analyse-bi-suisse/actions/workflows/powerbi.yml)
 
 ## Les résultats en un coup d'œil
 
@@ -28,7 +28,7 @@ La note complète : [**recommandations**](docs/05_recommandations.md).
 | 2. Définir les indicateurs | [Dictionnaire des KPI](docs/02_dictionnaire_kpi.md) : définition, formule, source, pièges de chaque indicateur |
 | 3. Modéliser | [Modèle de données](docs/03_modele_de_donnees.md) : constellation de deux faits et trois dimensions, grain, choix justifiés |
 | 4. Industrialiser | [Pipeline](pipeline/build.py) : extraction mensuelle depuis l'API de l'OFS, contrôles qualité bloquants, publication automatique |
-| 5. Restituer | [Rapport Power BI](powerbi/) : requêtes Power Query, [mesures DAX](powerbi/mesures.dax), thème, guide de construction |
+| 5. Restituer | [Rapport Power BI](powerbi/) prêt à ouvrir (PBIP) : 4 pages, 24 [mesures DAX](powerbi/mesures.dax), généré et validé comme du code |
 | 6. Valider | [Cahier de recette](docs/04_recette.md) : contrôles automatiques et 17 tests chiffrés du rapport |
 | 7. Recommander | [Note à la direction](docs/05_recommandations.md) : constats, recommandations, limites |
 
@@ -40,6 +40,7 @@ La note complète : [**recommandations**](docs/05_recommandations.md).
 - **Nomenclature changeante** : certains pays étaient regroupés autrefois (« Pays du Golfe »), puis détaillés. Une colonne de marché harmonisé permet de comparer 2019 et aujourd'hui.
 - **DAX** : intelligence temporelle (A-1, cumul annuel, 12 mois glissants), comparaison aux mêmes mois de 2019 avec `TREATAS`, parts de marché, contribution à la croissance, classements.
 - **Automatisation** : GitHub Actions met à jour les données chaque mois. Power BI les lit directement sur GitHub : une actualisation suffit.
+- **Report as code** : le rapport est au format projet Power BI (PBIP, TMDL et PBIR), généré par un script Python. À chaque modification, GitHub Actions valide le rapport contre les schémas officiels de Microsoft et charge le modèle dans Tabular Editor.
 
 ## Structure
 
@@ -47,7 +48,7 @@ La note complète : [**recommandations**](docs/05_recommandations.md).
 docs/        cahier des charges, KPI, modèle, recette, recommandations, graphiques
 pipeline/    build.py (extraction et modélisation), analyse.py (chiffres de référence et graphiques)
 data/        tables CSV du modèle en étoile + controles.json
-powerbi/     GUIDE.md, requêtes Power Query (.m), mesures.dax, thème
+powerbi/     Tourisme-Suisse.pbip (rapport prêt à ouvrir), build_pbip.py (générateur), GUIDE.md, mesures.dax, requêtes .m, thème
 tests/       contrôles qualité (pytest)
 ```
 
@@ -60,7 +61,7 @@ python -m pytest tests
 python pipeline/analyse.py
 ```
 
-Puis construire le rapport en suivant [`powerbi/GUIDE.md`](powerbi/GUIDE.md).
+Puis ouvrir `powerbi/Tourisme-Suisse.pbip` dans Power BI Desktop et cliquer sur **Actualiser** (détails dans [`powerbi/GUIDE.md`](powerbi/GUIDE.md)).
 
 ## Auteur
 

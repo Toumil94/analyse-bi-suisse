@@ -43,7 +43,7 @@ Valeurs de référence calculées indépendamment en Python ([`pipeline/analyse.
 | R-16 | Année 2026, Genève | Nuitées (janvier à août) | 2 567 634 | ☐ |
 | R-17 | Année 2026, Genève | Évolution vs A-1 (doit comparer à janvier-août 2025, pas à 2025 entier) | -0,3 % | ☐ |
 
-**Comment tester** : un visuel **Carte** avec la mesure, plus des segments pour les filtres. Si une valeur diffère, vérifier d'abord les relations (étape 3 du guide) et le marquage de la table de dates.
+**Comment tester** : un visuel **Carte** avec la mesure, plus des segments pour les filtres. Si une valeur diffère, vérifier d'abord les relations (fichier `powerbi/Tourisme-Suisse.SemanticModel/definition/relationships.tmdl`) et le marquage de la table de dates.
 
 ## 3. Tests fonctionnels
 

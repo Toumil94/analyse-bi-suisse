@@ -1,0 +1,90 @@
+/// Calendrier journalier continu, marqué comme table de dates.
+table Calendrier
+	lineageTag: 1359fca9-42fd-58ba-b9b1-71a3a15581d3
+	dataCategory: Time
+
+	column 'Date'
+		dataType: dateTime
+		isKey
+		formatString: dd.mm.yyyy
+		lineageTag: 2d0e35b7-fc38-5b9e-afe1-91663f8e94d7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Année' = YEAR ( [Date] )
+		dataType: int64
+		formatString: 0
+		lineageTag: b5be5f14-6de2-5fa1-8896-7983d35c5e54
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mois = MONTH ( [Date] )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1c272294-7eec-5d26-b0d9-97637c6d1ca9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mois nom' = FORMAT ( [Date], "mmm" )
+		dataType: string
+		lineageTag: 8662001c-5ef0-5a1f-91c2-d07d53cdee24
+		summarizeBy: none
+		sortByColumn: Mois
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mois début' = DATE ( YEAR ( [Date] ), MONTH ( [Date] ), 1 )
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: f5be3fa2-3487-5469-98fc-107b068ca492
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Année-mois' = FORMAT ( [Date], "yyyy-mm" )
+		dataType: string
+		lineageTag: 68e15e1b-bc12-5c59-9cec-bf8c6b2d03ac
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre = "T" & QUARTER ( [Date] )
+		dataType: string
+		lineageTag: 63684b05-157c-5bf4-9191-17daf3f24eb4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Saison = IF ( MONTH ( [Date] ) IN { 11, 12, 1, 2, 3, 4 }, "Hiver", "Été" )
+		dataType: string
+		lineageTag: d82c940e-29d5-5589-9997-8fd0fabfd9a0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Période COVID' =
+			SWITCH (
+			    TRUE (),
+			    [Date] < DATE ( 2020, 3, 1 ), "1. Avant COVID",
+			    [Date] <= DATE ( 2021, 12, 31 ), "2. COVID",
+			    "3. Après COVID"
+			)
+		dataType: string
+		lineageTag: 5d01a006-0a5a-5923-b47a-2b1c59c95711
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendrier = calculated
+		mode: import
+		source = CALENDAR ( DATE ( 2005, 1, 1 ), EOMONTH ( MAX ( fact_offre[date] ), 0 ) )
